@@ -41,8 +41,8 @@ class RepetitionCalculationBarbelFront {
         limitLowerFallBarbell,
         limitHigherRiseBarbell,
         limitLowerRiseBarbell,
-        160,
-        175);
+        150,
+        165);
 
     manipulationArray.verifyArray(angleHistory, historyLength, barbellLimit);
     print('angleHistory: $angleHistory');

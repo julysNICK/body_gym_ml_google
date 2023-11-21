@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -53,9 +54,15 @@ class CamExercise extends StatefulWidget {
 class _CamExerciseState extends State<CamExercise> {
   List<Pose> poses = <Pose>[];
   bool readyToStart = false;
+  int _Counter = 5;
+
+  late Timer _timer;
+  bool clickedExercise = false;
+  bool clickedExerciseNoFuture = false;
   double distanceWristAndShoulder = 0.0;
   double angleBarbell = 0.0;
   bool isBusy = false;
+  bool showStartText = false;
   bool showEndText = false;
   CameraLensDirection cameraLensDirection = CameraLensDirection.front;
   late CameraDescription cameraDescription;
@@ -79,6 +86,19 @@ class _CamExerciseState extends State<CamExercise> {
   final Exercise _armFlexionExercise = ArmFlexionExercise().createExercise();
 
   final Exercise _babelFrontExercise = BarbellExerciseFront().createExercise();
+
+  void startTimer() {
+    _Counter = 5;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_Counter > 0) {
+        setState(() {
+          _Counter--;
+        });
+      } else {
+        _timer.cancel();
+      }
+    });
+  }
 
   Future initCamera() async {
     try {
@@ -135,25 +155,13 @@ class _CamExerciseState extends State<CamExercise> {
   }
 
   void exitExercise12Repetition(int count) {
-    if (count == 5) {
-      print("Acabou o exercicio");
-      return;
-    }
-  }
-
-  void exitExercise12RepetitionText(int count) {
-    _data.dispose();
-
-    if (count == 12) {
+    if (count == 1) {
       setState(() {
         showEndText = true;
+        readyToStart = false;
       });
       return;
     }
-
-    setState(() {
-      showEndText = false;
-    });
   }
 
   double calculateAngleExercise(String typeExercise, Pose pose) {
@@ -224,21 +232,18 @@ class _CamExerciseState extends State<CamExercise> {
 
         angleC = calculateAngleExercise(widget.typeExercise, pose);
 
-        distanceS = calculateDistanceElbowExercise(widget.typeExercise, pose);
+        // distanceS = calculateDistanceElbowExercise(widget.typeExercise, pose);
 
-        position = calculatePositionExercise(widget.typeExercise, distanceS);
+        // position = calculatePositionExercise(widget.typeExercise, distanceS);
 
         countRep = calculateRepetitionExercise(widget.typeExercise, angleC);
 
         setState(() {
-          // distanceWristAndShoulder = distanceWristAndShoulder;
           count = countRep + count;
-          suggestion = suggestion;
-          slopePosition = position;
-          angleBarbell = angleC;
-        });
 
-        // exitExercise12RepetitionText(count);
+          // slopePosition = position;
+          // angleBarbell = angleC;
+        });
       }
     }
 
@@ -282,18 +287,38 @@ class _CamExerciseState extends State<CamExercise> {
               fontSize: 50.0,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCountDown() {
+    return Container(
+      margin: const EdgeInsets.only(top: 0.0, left: 10.0, right: 0.0),
+      child: Column(
+        children: [
           Text(
-            "Angle flexion Arm: $angleBarbell",
+            "🔥🔥Começando em: $_Counter🔥🔥",
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 50.0,
+              fontSize: 25.0,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextSucess() {
+    return Container(
+      margin: const EdgeInsets.only(top: 0.0, left: 20.0, right: 0.0),
+      child: const Column(
+        children: [
           Text(
-            "DIstance Knee: $slopePosition",
-            style: const TextStyle(
+            "💪💪Parabéns, você concluiu o exercício!💪💪",
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 20.0,
+              fontSize: 22.0,
             ),
           ),
         ],
@@ -363,6 +388,38 @@ class _CamExerciseState extends State<CamExercise> {
 
     stackChildren.add(
       Positioned(
+        top: 250.0,
+        left: 0.0,
+        width: size.width,
+        height: size.height,
+        child: AnimatedOpacity(
+          opacity: showEndText ? 1.0 : 0.0,
+          duration: const Duration(
+            milliseconds: 500,
+          ),
+          child: _buildTextSucess(),
+        ),
+      ),
+    );
+
+    stackChildren.add(
+      Positioned(
+        top: MediaQuery.of(context).size.height / 2,
+        left: 0.0,
+        width: size.width,
+        height: size.height,
+        child: AnimatedOpacity(
+          opacity: clickedExerciseNoFuture ? 1.0 : 0.0,
+          duration: const Duration(
+            milliseconds: 500,
+          ),
+          child: _buildCountDown(),
+        ),
+      ),
+    );
+
+    stackChildren.add(
+      Positioned(
         bottom: 0.0,
         left: 0.0,
         width: size.width,
@@ -371,11 +428,16 @@ class _CamExerciseState extends State<CamExercise> {
           onTap: () {
             //change readyToStart to true after 5 seconds
             // print("chamei onTap");
-
+            setState(() {
+              clickedExerciseNoFuture = !clickedExerciseNoFuture;
+            });
+            startTimer();
             Future.delayed(const Duration(seconds: 5), () {
               // print("chamei Future.delayed");
               setState(() {
                 readyToStart = true;
+                clickedExercise = !clickedExercise;
+                clickedExerciseNoFuture = !clickedExerciseNoFuture;
               });
             });
           },
@@ -385,7 +447,7 @@ class _CamExerciseState extends State<CamExercise> {
             decoration: _decorationText,
             child: Center(
               child: Text(
-                "Começar a treinar",
+                clickedExercise ? "Exercício iniciado" : "Clique para iniciar",
                 style: _stylesText,
               ),
             ),
