@@ -1,44 +1,21 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-
-import 'package:body_gym/class/class_arm_flexion.dart';
-import 'package:body_gym/class/class_squat_front.dart';
-import 'package:body_gym/class/exercise.dart';
+import 'package:body_gym/class/calculations_exercise.dart';
+import 'package:body_gym/class/camExerciseStateData.dart';
 import 'package:body_gym/class/pose_frame.dart';
-import 'package:body_gym/screen/pose_painter.dart';
+import 'package:body_gym/screen/widgets/ListWidget.dart';
 import 'package:camera/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'package:body_gym/class/slope_track.dart';
 import 'package:body_gym/class/handle_camera.dart';
 import 'package:body_gym/class/calculate_angle.dart';
-import 'package:body_gym/class/class_barbell.dart';
 import 'package:body_gym/class/calculate_distance_point.dart';
-import 'package:body_gym/class/class_barbell_front.dart';
 import 'package:body_gym/class/distance_range_checker.dart';
 import 'package:body_gym/class/image_lib.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 
 late List<CameraDescription> cameras;
-
-class _CamExerciseStateData {
-  late dynamic controller;
-  late dynamic poseDetection;
-  late SlopeTrack slopeTrack;
-
-  _CamExerciseStateData({
-    required this.poseDetection,
-    required this.controller,
-    required this.slopeTrack,
-  });
-
-  void dispose() {
-    controller.dispose();
-  }
-}
 
 class CamExercise extends StatefulWidget {
   const CamExercise(
@@ -71,9 +48,8 @@ class _CamExerciseState extends State<CamExercise> {
   CameraHandle cameraHandle = CameraHandle();
   int count = 0;
   dynamic _scanResults;
-  //in use
 
-  late _CamExerciseStateData _data;
+  late CamExerciseStateData _data;
   CameraImage? img;
   bool isRepeting = false;
   GetImage getImage = GetImage();
@@ -81,12 +57,7 @@ class _CamExerciseState extends State<CamExercise> {
   CalculateDistancePoint calculateDistancePoint = CalculateDistancePoint();
   DistanceRangeChecker distanceRangeChecker = DistanceRangeChecker();
 
-  final Exercise _babelExercise = BarbellExercise().createExercise();
-  final Exercise _squatExercise = SquatExerciseFront().createExercise();
-  final Exercise _armFlexionExercise = ArmFlexionExercise().createExercise();
-
-  final Exercise _babelFrontExercise = BarbellExerciseFront().createExercise();
-
+  final CalculationsExercise calculateRepetition = CalculationsExercise();
   void startTimer() {
     _Counter = 5;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -115,7 +86,7 @@ class _CamExerciseState extends State<CamExercise> {
   void initState() {
     super.initState();
     initCamera();
-    _data = _CamExerciseStateData(
+    _data = CamExerciseStateData(
       controller: cameraHandle.controller,
       poseDetection: false,
       slopeTrack: SlopeTrack(),
@@ -164,58 +135,6 @@ class _CamExerciseState extends State<CamExercise> {
     }
   }
 
-  double calculateAngleExercise(String typeExercise, Pose pose) {
-    switch (typeExercise) {
-      case "biceps":
-        return calculateAngle.calculateAngleInBarbellCurls(pose);
-      case "squat":
-        return calculateAngle.calculateAngleInSquat(pose);
-      case "armFlexion":
-        return calculateAngle.calculateAngleInArmFlexion(pose);
-      default:
-        return 0.0;
-    }
-  }
-
-  int calculateRepetitionExercise(String typeExercise, double angleC) {
-    switch (typeExercise) {
-      case "biceps":
-        return _babelFrontExercise.calculationRepetition(angleC);
-      case "squat":
-        return _squatExercise.calculationRepetition(angleC);
-      case "armFlexion":
-        return _armFlexionExercise.calculationRepetition(angleC);
-      default:
-        return 0;
-    }
-  }
-
-  double calculateDistanceElbowExercise(String typeExercise, Pose pose) {
-    switch (typeExercise) {
-      case "biceps":
-        return calculateDistancePoint.distanceElbow(pose);
-      case "squat":
-        return calculateDistancePoint.distanceElbow(pose);
-      case "armFlexion":
-        return calculateDistancePoint.distanceElbow(pose);
-      default:
-        return 0.0;
-    }
-  }
-
-  String calculatePositionExercise(String typeExercise, double distanceS) {
-    switch (typeExercise) {
-      case "biceps":
-        return distanceRangeChecker.rangeKneeShoulder(distanceS);
-      case "squat":
-        return distanceRangeChecker.rangeKneeShoulder(distanceS);
-      case "armFlexion":
-        return distanceRangeChecker.rangeKneeShoulder(distanceS);
-      default:
-        return "";
-    }
-  }
-
   final AngleCalculator angleCalculator = AngleCalculator();
   _updatePoseState() async {
     var frameImg =
@@ -230,13 +149,15 @@ class _CamExerciseState extends State<CamExercise> {
         String position = "";
         int countRep = 0;
 
-        angleC = calculateAngleExercise(widget.typeExercise, pose);
+        angleC = calculateRepetition.calculateAngleExercise(
+            widget.typeExercise, pose);
 
-        // distanceS = calculateDistanceElbowExercise(widget.typeExercise, pose);
+        // distanceS = calculateRepetition.calculateDistanceElbowExercise(widget.typeExercise, pose);
 
-        // position = calculatePositionExercise(widget.typeExercise, distanceS);
+        // position = calculateRepetition.calculatePositionExercise(widget.typeExercise, distanceS);
 
-        countRep = calculateRepetitionExercise(widget.typeExercise, angleC);
+        countRep = calculateRepetition.calculateRepetitionExercise(
+            widget.typeExercise, angleC);
 
         setState(() {
           count = countRep + count;
@@ -260,202 +181,22 @@ class _CamExerciseState extends State<CamExercise> {
     await _updatePoseState();
   }
 
-  Widget buildResult() {
-    if (_scanResults == null || !_data.controller.value.isInitialized) {
-      return const Text('');
-    }
-
-    final Size imageSize = Size(
-      _data.controller.value.previewSize!.height,
-      _data.controller.value.previewSize!.width,
-    );
-    CustomPainter painter =
-        PosePainter(imageSize, _scanResults, cameraLensDirection);
-    return CustomPaint(
-      painter: painter,
-    );
+  void functionOnTapStartExecise() {
+    setState(() {
+      clickedExerciseNoFuture = !clickedExerciseNoFuture;
+    });
+    startTimer();
+    Future.delayed(const Duration(seconds: 5), () {
+      setState(() {
+        readyToStart = true;
+        clickedExercise = !clickedExercise;
+        clickedExerciseNoFuture = !clickedExerciseNoFuture;
+      });
+    });
   }
-
-  Widget _buidExercice() {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            "Repetition: $count",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 50.0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCountDown() {
-    return Container(
-      margin: const EdgeInsets.only(top: 0.0, left: 10.0, right: 0.0),
-      child: Column(
-        children: [
-          Text(
-            "🔥🔥Começando em: $_Counter🔥🔥",
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 25.0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTextSucess() {
-    return Container(
-      margin: const EdgeInsets.only(top: 0.0, left: 20.0, right: 0.0),
-      child: const Column(
-        children: [
-          Text(
-            "💪💪Parabéns, você concluiu o exercício!💪💪",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22.0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIfCameraInit() {
-    return Container(
-      child: (_data.controller.value.isInitialized)
-          ? Container(
-              child: CameraPreview(_data.controller),
-            )
-          : Container(),
-    );
-  }
-
-  final BoxDecoration _decorationText = BoxDecoration(
-    color: Colors.blue.withOpacity(0.5),
-    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-    boxShadow: const [
-      BoxShadow(
-        color: Colors.black,
-        spreadRadius: 1,
-        blurRadius: 1,
-        offset: Offset(0, 1), // changes position of shadow
-      ),
-    ],
-  );
-
-  final TextStyle _stylesText = const TextStyle(
-    color: Colors.white,
-    fontSize: 20.0,
-  );
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> stackChildren = [];
-    final size = MediaQuery.of(context).size;
-    stackChildren.add(
-      Positioned(
-        top: 0.0,
-        left: 0.0,
-        width: size.width,
-        height: size.height,
-        child: _buildIfCameraInit(),
-      ),
-    );
-    stackChildren.add(
-      Positioned(
-          top: 0.0,
-          left: 0.0,
-          width: size.width,
-          height: size.height,
-          child: buildResult()),
-    );
-
-    stackChildren.add(
-      Positioned(
-        top: 0.0,
-        left: 0.0,
-        width: size.width,
-        height: size.height,
-        child: _buidExercice(),
-      ),
-    );
-
-    stackChildren.add(
-      Positioned(
-        top: 250.0,
-        left: 0.0,
-        width: size.width,
-        height: size.height,
-        child: AnimatedOpacity(
-          opacity: showEndText ? 1.0 : 0.0,
-          duration: const Duration(
-            milliseconds: 500,
-          ),
-          child: _buildTextSucess(),
-        ),
-      ),
-    );
-
-    stackChildren.add(
-      Positioned(
-        top: MediaQuery.of(context).size.height / 2,
-        left: 0.0,
-        width: size.width,
-        height: size.height,
-        child: AnimatedOpacity(
-          opacity: clickedExerciseNoFuture ? 1.0 : 0.0,
-          duration: const Duration(
-            milliseconds: 500,
-          ),
-          child: _buildCountDown(),
-        ),
-      ),
-    );
-
-    stackChildren.add(
-      Positioned(
-        bottom: 0.0,
-        left: 0.0,
-        width: size.width,
-        height: 50.0,
-        child: InkWell(
-          onTap: () {
-            //change readyToStart to true after 5 seconds
-            // print("chamei onTap");
-            setState(() {
-              clickedExerciseNoFuture = !clickedExerciseNoFuture;
-            });
-            startTimer();
-            Future.delayed(const Duration(seconds: 5), () {
-              // print("chamei Future.delayed");
-              setState(() {
-                readyToStart = true;
-                clickedExercise = !clickedExercise;
-                clickedExerciseNoFuture = !clickedExerciseNoFuture;
-              });
-            });
-          },
-          child: Container(
-            width: size.width,
-            height: 10.0,
-            decoration: _decorationText,
-            child: Center(
-              child: Text(
-                clickedExercise ? "Exercício iniciado" : "Clique para iniciar",
-                style: _stylesText,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -463,7 +204,18 @@ class _CamExerciseState extends State<CamExercise> {
             margin: const EdgeInsets.only(top: 0),
             color: Colors.black,
             child: Stack(
-              children: stackChildren,
+              children: listWidgetFn(
+                context,
+                functionOnTapStartExecise,
+                clickedExerciseNoFuture,
+                _Counter,
+                clickedExerciseNoFuture,
+                showEndText,
+                count,
+                _data,
+                _scanResults,
+                cameraLensDirection,
+              ),
             )),
       ),
     );
