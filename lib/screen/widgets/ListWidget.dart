@@ -7,6 +7,7 @@ import 'package:body_gym/screen/widgets/buildResult.dart';
 import 'package:body_gym/screen/widgets/buildTextSuccess.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:body_gym/screen/widgets/buildArrayTextExercises.dart';
 
 List<Widget> listWidgetFn(
     BuildContext context,
@@ -98,6 +99,18 @@ List<Widget> listWidgetFn(
         child: buildCountDown(
           counter,
         ),
+      ),
+    ),
+  );
+
+  stackChildren.add(
+    Positioned(
+      top: size.height / 1.3,
+      left: 0.0,
+      width: size.width,
+      height: size.height,
+      child: Center(
+        child: buildArrayTextExercise(),
       ),
     ),
   );
