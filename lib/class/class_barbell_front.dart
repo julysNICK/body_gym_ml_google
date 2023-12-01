@@ -12,7 +12,7 @@ class BarbellExerciseFront implements Exercise {
 
   @override
   int calculationRepetition(double angle) {
-    print('angle front: $angle');
+    // print('angle front: $angle');
     return repetitionCalculation.calculationRepetition(angle);
   }
 

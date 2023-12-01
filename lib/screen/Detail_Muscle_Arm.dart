@@ -22,12 +22,14 @@ class _DetailMuscleArmState extends State<DetailMuscleArm> {
           bottom: 10,
         ),
         height: size.height,
-        child: const Column(
+        child: Column(
           children: [
-            MainPicture(
+            const MainPicture(
               typeExercise: "armFlexion",
             ),
-            BoxCards(),
+            BoxCards(
+              listTutorial: const [],
+            ),
           ],
         ),
       ),

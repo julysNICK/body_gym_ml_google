@@ -9,7 +9,7 @@ class ArmFlexionExercise implements Exercise {
 
   @override
   int calculationRepetition(double angle) {
-    print('angle: $angle');
+    // print('angle: $angle');
     return repetitionCalculation.calculationRepetition(angle.roundToDouble());
   }
 

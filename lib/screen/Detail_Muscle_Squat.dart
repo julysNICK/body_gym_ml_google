@@ -22,12 +22,14 @@ class _DetailMuscleSquatState extends State<DetailMuscleSquat> {
           bottom: 10,
         ),
         height: size.height,
-        child: const Column(
+        child: Column(
           children: [
-            MainPicture(
+            const MainPicture(
               typeExercise: "squat",
             ),
-            BoxCards(),
+            BoxCards(
+              listTutorial: const [],
+            ),
           ],
         ),
       ),

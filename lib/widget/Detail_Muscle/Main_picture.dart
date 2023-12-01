@@ -90,7 +90,7 @@ class ImageCompress extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Image.asset(
-            'assets/images/workout-biceps.jpg',
+            'assets/images/workout-bicepscompress2.jpg',
             fit: BoxFit.cover,
             height: MediaQuery.of(context).size.height * 0.45,
             width: MediaQuery.of(context).size.width,
@@ -106,7 +106,7 @@ class ImageCompress extends StatelessWidget {
 }
 
 Future<void> compressAndResizeImage() async {
-  String path = 'assets/images/workout-biceps.jpg';
+  String path = 'assets/images/workout-bicepscompress2.jpg';
 
   var compresseImage = await FlutterImageCompress.compressWithFile(
     path,
@@ -115,7 +115,7 @@ Future<void> compressAndResizeImage() async {
     quality: 94,
   );
 
-  String newPath = 'assets/images/workout-biceps-compressed.jpg';
+  String newPath = 'assets/images/workout-bicepscompress2.jpg';
 
   await File(newPath).writeAsBytes(compresseImage as List<int>);
 }

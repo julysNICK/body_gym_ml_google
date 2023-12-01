@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 
 class CardTutorial extends StatelessWidget {
   String title;
+  String title2;
+  String thumUrl;
   CardTutorial({
     super.key,
     this.title = "Tutorial 1",
+    this.title2 = "Tutorial 2",
+    this.thumUrl = "https://i.ytimg.com/vi/2Vv-BfVoq4g/maxresdefault.jpg",
   });
 
   @override
@@ -21,13 +25,12 @@ class CardTutorial extends StatelessWidget {
             color: const Color(0xFFA4BFCC),
             borderRadius: BorderRadius.circular(50),
           ),
-          child: const Center(
-            child: Text(
-              "1",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
+          child: Center(
+            child: Image.network(
+              thumUrl,
+              fit: BoxFit.cover,
+              height: 50,
+              width: 50,
             ),
           ),
         ),
@@ -38,9 +41,9 @@ class CardTutorial extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        subtitle: const Text(
-          "Tutorial 1",
-          style: TextStyle(
+        subtitle: Text(
+          title2,
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),

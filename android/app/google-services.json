@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "964708349152",
+    "project_id": "videosexercise-4fc06",
+    "storage_bucket": "videosexercise-4fc06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964708349152:android:f260f4c1b0d58fd64a0c85",
+        "android_client_info": {
+          "package_name": "com.example.body_gym"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4qLVT8G6rNcenYxg8g08c6zTQDTGSH_g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

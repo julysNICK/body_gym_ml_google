@@ -168,7 +168,7 @@ class _CamExerciseState extends State<CamExercise> {
       }
     }
 
-    print("count: $count");
+    // print("count: $count");
     exitExercise12Repetition(count);
 
     setState(() {
