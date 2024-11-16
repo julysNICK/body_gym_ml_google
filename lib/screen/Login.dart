@@ -1,11 +1,73 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
+
+  Future<void> login() async {
+    print("usernameController.text ${usernameController.text}");
+    if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all fields'),
+        ),
+      );
+    } else {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: usernameController.text,
+          password: passwordController.text,
+        );
+        Navigator.pushNamed(context, '/home');
+      } on FirebaseAuthException catch (e) {
+        print("deu erro 33");
+        print(e);
+        if (e.code == 'user-not-found') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('No user found for that email.'),
+            ),
+          );
+        } else if (e.code == 'wrong-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Wrong password provided for that user.'),
+            ),
+          );
+        }
+      } catch (e) {
+        print("deu erro 49");
+        print(e);
+      }
+    }
+  }
+
+  Future<void> checkifyouareloggedin() async {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        Navigator.pushNamed(context, '/home');
+      }
+    });
+  }
+
+  @override
+  initState() {
+    super.initState();
+    checkifyouareloggedin();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,10 +117,24 @@ class LoginScreen extends StatelessWidget {
                 height: 15,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/register');
+                      },
+                      child: Text(
+                        'Create an account',
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
                     Text(
                       'Forgot password?',
                       style: TextStyle(
@@ -71,7 +147,9 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const ButtonSignin()
+              ButtonSignin(
+                login: login,
+              )
             ],
           ),
         ),
@@ -80,15 +158,24 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class ButtonSignin extends StatelessWidget {
-  const ButtonSignin({
+class ButtonSignin extends StatefulWidget {
+  void Function() login;
+  ButtonSignin({
     super.key,
+    required this.login,
   });
 
   @override
+  State<ButtonSignin> createState() => _ButtonSigninState();
+}
+
+class _ButtonSigninState extends State<ButtonSignin> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        widget.login();
+      },
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),

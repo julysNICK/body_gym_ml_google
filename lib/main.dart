@@ -1,3 +1,5 @@
+import 'package:body_gym/screen/Login.dart';
+import 'package:body_gym/screen/Register.dart';
 import 'package:body_gym/screen/home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,12 @@ class MyWidget extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomeGym(),
+      initialRoute: '/',
+      routes: {
+        '/home': (context) => const HomeGym(),
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
+      },
     );
   }
 }

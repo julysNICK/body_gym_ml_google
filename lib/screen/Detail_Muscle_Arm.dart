@@ -1,3 +1,4 @@
+import 'package:body_gym/repositories/videosRepository.dart';
 import 'package:body_gym/widget/Detail_Muscle/Box_Cards.dart';
 import 'package:body_gym/widget/Detail_Muscle/Main_picture.dart';
 
@@ -11,6 +12,42 @@ class DetailMuscleArm extends StatefulWidget {
 }
 
 class _DetailMuscleArmState extends State<DetailMuscleArm> {
+  VideosRepository videosRepository = VideosRepository();
+
+  List<Map<String, dynamic>> resultVideos = [];
+  List<Map<String, dynamic>> resultVideosFormat = [];
+  Future getVideosTriceps() async {
+    try {
+      var resultVideosCall = await videosRepository.getVideosTriceps();
+
+      for (var i = 0; i < resultVideosCall.length; i++) {
+        resultVideosFormat.add({
+          "title": resultVideosCall[i]["title"],
+          "thumb": resultVideosCall[i]["thumb"],
+          "url": resultVideosCall[i]["url"],
+          "channel": resultVideosCall[i]["chanel"],
+        });
+      }
+
+      setState(() {
+        resultVideos = resultVideosFormat;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getVideosTriceps();
+  }
+
+  printResult() {
+    print(resultVideos);
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -28,7 +65,7 @@ class _DetailMuscleArmState extends State<DetailMuscleArm> {
               typeExercise: "armFlexion",
             ),
             BoxCards(
-              listTutorial: const [],
+              listTutorial: resultVideos,
             ),
           ],
         ),

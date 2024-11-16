@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 
-Widget buildArrayTextExercise() {
+Widget buildArrayTextExercise(
+  String typeExercise,
+) {
   List<String> phrasesAboutExercise = [
     "Faça o exercicio de forma lenta e controlada",
     "Mantenha a postura",
@@ -20,6 +22,10 @@ Widget buildArrayTextExercise() {
     child: Column(
       children: [
         AnimatedTextKit(animatedTexts: [
+          FadeAnimatedText(
+            "Exercicio: $typeExercise",
+            textStyle: styleTextIn,
+          ),
           FadeAnimatedText(
             "Faça o exercicio de forma lenta e controlada",
             textStyle: styleTextIn,

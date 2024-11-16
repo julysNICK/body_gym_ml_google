@@ -28,4 +28,42 @@ class VideosRepository {
       return [];
     }
   }
+
+  Future<List<Map<String, dynamic>>> getVideosLegs() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance.collection("videosLegs").get();
+
+      List<Map<String, dynamic>> list = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data();
+        data["id"] = doc.id;
+        return data;
+      }).toList();
+
+      return list;
+    } catch (e) {
+      print(e);
+
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getVideosTriceps() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance.collection("videosTriceps").get();
+
+      List<Map<String, dynamic>> list = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data();
+        data["id"] = doc.id;
+        return data;
+      }).toList();
+
+      return list;
+    } catch (e) {
+      print(e);
+
+      return [];
+    }
+  }
 }

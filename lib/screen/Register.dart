@@ -1,14 +1,66 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RegisterScreen extends StatelessWidget {
-  RegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
+
   final emailController = TextEditingController();
+
   final phoneController = TextEditingController();
+
   final weightController = TextEditingController();
+
   final heightController = TextEditingController();
+
+  Future<void> register() async {
+    if (usernameController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        weightController.text.isEmpty ||
+        heightController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all fields'),
+        ),
+      );
+    } else {
+      try {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        Navigator.pushNamed(context, '/login');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('The password provided is too weak.'),
+            ),
+          );
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('The account already exists for that email.'),
+            ),
+          );
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +153,9 @@ class RegisterScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const ButtonSignUp()
+              ButtonSignUp(
+                register: register,
+              )
             ],
           ),
         ),
@@ -110,15 +164,24 @@ class RegisterScreen extends StatelessWidget {
   }
 }
 
-class ButtonSignUp extends StatelessWidget {
-  const ButtonSignUp({
+class ButtonSignUp extends StatefulWidget {
+  void Function() register;
+  ButtonSignUp({
     super.key,
+    required this.register,
   });
 
   @override
+  State<ButtonSignUp> createState() => _ButtonSignUpState();
+}
+
+class _ButtonSignUpState extends State<ButtonSignUp> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        widget.register();
+      },
       child: Container(
         padding: const EdgeInsets.all(25),
         margin: const EdgeInsets.symmetric(horizontal: 25),

@@ -205,6 +205,7 @@ class _CamExerciseState extends State<CamExercise> {
             color: Colors.black,
             child: Stack(
               children: listWidgetFn(
+                widget.typeExercise,
                 context,
                 functionOnTapStartExecise,
                 clickedExerciseNoFuture,

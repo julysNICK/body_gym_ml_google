@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:body_gym/screen/widgets/buildArrayTextExercises.dart';
 
 List<Widget> listWidgetFn(
+    String typeExercise,
     BuildContext context,
     void Function() functionOnTapStartExecise,
     bool clickedExercise,
@@ -110,7 +111,7 @@ List<Widget> listWidgetFn(
       width: size.width,
       height: size.height,
       child: Center(
-        child: buildArrayTextExercise(),
+        child: buildArrayTextExercise(typeExercise),
       ),
     ),
   );

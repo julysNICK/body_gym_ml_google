@@ -1,3 +1,5 @@
+import 'package:body_gym/repositories/UserRepository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,31 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  UserRepository userRepository = UserRepository();
+
+  User? userLog = FirebaseAuth.instance.currentUser;
+
+  Future getUser() async {
+    try {
+      var user = await userRepository.getCurrentUser();
+
+      print(user!.email);
+
+      setState(() {
+        userLog = user;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,8 +53,8 @@ class _ProfileState extends State<Profile> {
                   'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'),
             ),
             Information(
-              title: "Name",
-              value: "Jonh Doe",
+              title: "Email",
+              value: userLog!.email.toString(),
             ),
             Information(
               title: "Height",

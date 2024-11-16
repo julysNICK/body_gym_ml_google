@@ -13,68 +13,68 @@ class VideoList extends StatefulWidget {
 class _VideoListState extends State<VideoList> {
   final List _elements = [
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=4d2lQKDXTJM',
+      'thumbnail': 'https://i3.ytimg.com/vi/4d2lQKDXTJM/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'chest'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=4d2lQKDXTJM',
+      'thumbnail': 'https://i3.ytimg.com/vi/4d2lQKDXTJM/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'chest'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=4d2lQKDXTJM',
+      'thumbnail': 'https://i3.ytimg.com/vi/4d2lQKDXTJM/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'chest'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=4d2lQKDXTJM',
+      'thumbnail': 'https://i3.ytimg.com/vi/4d2lQKDXTJM/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'chest'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
     {
-      'url': 'https://www.youtube.com/watch?v=1U0nRj6JvM4',
-      'thumbnail': 'https://i.ytimg.com/vi/1U0nRj6JvM4/maxresdefault.jpg',
+      'url': 'https://www.youtube.com/watch?v=PopLJv4U4FY',
+      'thumbnail': 'https://i3.ytimg.com/vi/PopLJv4U4FY/maxresdefault.jpg',
       'title': 'train chest',
       'group': 'biceps'
     },
